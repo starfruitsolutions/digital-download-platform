@@ -10,8 +10,13 @@ const routes = [
     component: Home
   },
   {
+    path: '/release/:id',
+    name: 'release',
+    component: () => import(/* webpackChunkName: "release" */ '@/views/release.vue')
+  },
+  {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '@/views/login.vue')
   },
   {

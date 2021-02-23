@@ -1,31 +1,26 @@
 <template>
   <v-app>
     <v-app-bar
+      v-if="this.$route.name != 'release'"
       app
       color="primary"
       dark
+      class="px-5"
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+      <router-link to="/" tag="div" class="d-flex align-center">
+        <v-icon x-large>fas fa-tape</v-icon>
+        <h1 class="ml-2">
+          TapeShare
+        </h1>
+      </router-link>
 
       <v-spacer></v-spacer>
+      <v-btn
+        :to="{path: '/login'}"
+        flat
+      >
+            Login
+      </v-btn>
 
     </v-app-bar>
 
