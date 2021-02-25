@@ -13,26 +13,20 @@
     </template>
 
     <v-img
-      src="https://linkstorage.linkfire.com/medialinks/images/4b41d5f1-b8d0-4bcc-895e-f5226b9c6c30/artwork-440x440.jpg"
+      :src="release.imageURL"
     ></v-img>
 
     <v-card-text class="pa-7">
       <v-row>
         <v-col>
-          <h1>Cajun Things</h1>
+          <h1>{{release.title}}</h1>
           <p class="my-2 subtitle-1">
-            <v-icon small class="mr-2">fas fa-tape</v-icon>WiteNoize
+            <v-icon small class="mr-2">fas fa-tape</v-icon>{{ release.author }}
           </p>
 
           <v-spacer class="my-5"></v-spacer>
 
-          <div>
-                Billboard TOP 50 Music Producer<br>
-                @WteNoize<br>
-                WiteNoize.com<br>
-                A Dying Breed Survived & A Dynasty Submerged.<br>
-                #WiteNoize
-          </div>
+          <div>{{ release.description }}</div>
 
           <v-spacer class="my-8"></v-spacer>
 
@@ -40,6 +34,9 @@
         </v-col>
         <v-divider vertical></v-divider>
         <v-col>
+            <div class="mb-3 d-flex justify-center">
+              <h2> ${{ release.price }} </h2>
+            </div>
             <v-btn
               color="deep-purple"
               dark
@@ -69,16 +66,26 @@
 </template>
 
 <script>
+// import vuex mapping
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
-  data () {
-    return {
-      valid: false,
-      form: {
-        email: null,
-        password: null
-      }
-    }
+  mounted (){
+    this.fetchRelease({
+      userID: this.$route.params.userID,
+      releaseID: this.$route.params.releaseID
+    })
   },
+  computed:{
+    ...mapGetters({
+      release: 'release'
+    })
+  },
+  methods: {
+    ...mapActions({
+      fetchRelease: 'fetchRelease'
+    }),
+  }
 }
 </script>
 

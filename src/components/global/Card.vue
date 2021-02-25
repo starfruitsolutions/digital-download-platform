@@ -5,28 +5,32 @@
     class="card elevation-3"
   >
     <v-toolbar
+       class="px-6"
       :class="{'clickable': expandable}"
-      color="blue darken-3"
+      color="deep-purple accent-3"
       dark
+      height="100"
       @click="toggle()">
       <v-toolbar-side-icon v-if="expandable">
         <v-icon v-if="!expanded">fa-plus-square</v-icon>
         <v-icon v-if="expanded">fa-minus-square</v-icon>
       </v-toolbar-side-icon>
-      <h2 class="pa-10">
-        <slot name = "header"/>
-      </h2>
-      <v-spacer/>
-      <div class="header-extras">
-        <slot name = "extras"/>
-      </div>
+      <v-toolbar-title>
+        <h3>
+          <slot name = "header"/>
+        </h3>
+      </v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <slot name = "extras"/>
     </v-toolbar>
-    <div
+    <p
       v-if="!expandable || expanded"
       :class="{ 'pa-10': padding}"
     >
       <slot/>
-    </div>
+    </p>
   </v-card>
 </template>
 

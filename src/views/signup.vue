@@ -10,7 +10,7 @@
         sm8
         lg4>
         <Card>
-          <template slot="header">Login</template>
+          <template slot="header">Sign Up</template>
           <v-container>
             <v-form
               ref="form"
@@ -23,6 +23,20 @@
                 label="Email"
                 autocomplete="username"
                 prepend-icon="fa-envelope"
+              />
+              <v-text-field
+                v-model="form.name"
+                :rules="[validationRules.required]"
+                label="Name"
+                autocomplete="display name"
+                prepend-icon="fa-user"
+              />
+              <v-text-field
+                v-model="form.displayName"
+                :rules="[validationRules.required]"
+                label="Display Name"
+                autocomplete="display name"
+                prepend-icon="fa-user-tag"
               />
               <v-text-field
                 v-model="form.password"
@@ -39,20 +53,6 @@
               >
                 Submit
               </v-btn>
-                <v-flex>
-                  New to TapeShare?
-                  <router-link
-                    :to="{ path: '/signup' }"
-                    class="pa-3">Sign Up
-                  </router-link>
-                </v-flex>
-                <v-flex>
-                  Forget your password?
-                  <router-link
-                    :to="{ path: '/passwordreset'}"
-                    class="pa-3">Reset Password
-                  </router-link>
-                </v-flex>
             </v-form>
           </v-container>
         </Card>
@@ -73,16 +73,18 @@ export default {
       valid: false,
       form: {
         email: null,
+        name: null,
+        displayName: null,
         password: null
       }
     }
   },
   methods: {
     ...mapActions({
-      login: 'login'
+      signup: 'signup'
     }),
     submit () {
-      this.login(this.form).then(() => this.$router.push(this.$route.query.redirect || '/dashboard'))
+      this.signup(this.form).then(() => this.$router.push(this.$route.query.redirect || '/dashboard'))
     }
   }
 }

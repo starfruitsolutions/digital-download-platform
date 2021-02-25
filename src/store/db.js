@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import 'firebase/auth'
 import 'firebase/firestore'
 
 // Get a Firestore instance
@@ -11,9 +12,13 @@ var firebaseConfig = {
     appId: "1:717894786446:web:93db2388469ed160c518df"
   }
 
-export const db = firebase
-  .initializeApp(firebaseConfig)
-  .firestore()
+firebase.initializeApp(firebaseConfig)
+
+export const auth = firebase.auth()
+
+export const db = firebase.firestore()
+
+export const fb = firebase
 
 // Export types that exists in Firestore
 // This is not always necessary, but it's used in other examples

@@ -3,7 +3,7 @@
     <v-app-bar
       v-if="this.$route.name != 'release'"
       app
-      color="primary"
+      color="deep-purple accent-4"
       dark
       class="px-5"
     >
@@ -16,10 +16,18 @@
 
       <v-spacer></v-spacer>
       <v-btn
+        v-if="auth"
         :to="{path: '/login'}"
-        flat
+        text
       >
             Login
+      </v-btn>
+      <v-btn
+        v-else
+        :to="{path: '/settings'}"
+        text
+      >
+        <v-icon class="mx-3">fa-user-circle</v-icon> {{ userProfile.displayName }}
       </v-btn>
 
     </v-app-bar>
@@ -31,15 +39,26 @@
 </template>
 
 <script>
+import { auth } from '@/store/db'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'App',
-
-  components: {
+  mounted(){
+    if(auth.currentUser) {
+      this.bindUserProfile()
+    }
   },
-
-  data: () => ({
-    //
-  }),
+  computed: {
+    ...mapGetters({
+      userProfile: 'userProfile'
+    }),
+    auth() { return !auth.currentUser }
+  },
+  methods: {
+    ...mapActions({
+      bindUserProfile: 'bindUserProfile'
+    })
+  }
 };
 </script>
