@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 // import router from '../router'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
-import { auth, db } from './db'
+import { auth, db, storage } from './db'
 
 
 Vue.use(Vuex)
@@ -68,19 +68,46 @@ export default new Vuex.Store({
     }),
 
     async addRelease(context, form) {
-      // create user profile object in userCollections
-      await db.collection(`users/${auth.currentUser.uid}/releases`).add(form)
+      const { imageFile, audioFile, ...data } = form
+
+      // create release document
+      const doc = await db.collection(`users/${auth.currentUser.uid}/releases`).add(data)
+
+      //upload
+      // image
+      await storage.ref(`images/${auth.currentUser.uid}/${doc.id}`).put(imageFile)
+      // audio
+      await storage.ref(`audio/${auth.currentUser.uid}/${doc.id}`).put(audioFile)
+
+      doc.update({
+        imageURL: await storage.ref(`images/${auth.currentUser.uid}/${doc.id}`).getDownloadURL()
+      })
     },
 
     async updateRelease(context, form) {
-      // create user profile object in userCollections
-      await db.collection(`users/${auth.currentUser.uid}/releases`).doc(form.id).set(form)
+      const { imageFile, audioFile, ...data } = form
+
+      //upload
+      // image
+      if(imageFile){
+        await storage.ref(`images/${auth.currentUser.uid}/${form.id}`).put(imageFile)
+      }
+      // audio
+      if(audioFile){
+        await storage.ref(`audio/${auth.currentUser.uid}/${form.id}`).put(audioFile)
+      }
+
+      db.collection(`users/${auth.currentUser.uid}/releases`).doc(form.id).set({
+        ...data,
+        imageURL: await storage.ref(`images/${auth.currentUser.uid}/${form.id}`).getDownloadURL()
+      })
     },
 
     async deleteRelease(context, payload) {
       console.log(payload)
       // create user profile object in userCollections
       await db.collection(`users/${auth.currentUser.uid}/releases`).doc(payload).delete()
+      await storage.ref(`images/${auth.currentUser.uid}/${payload}`).delete()
     },
 
     fetchRelease: async ({commit}, payload) => {

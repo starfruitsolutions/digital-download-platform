@@ -9,14 +9,19 @@
       @ok="save"
       @cancel="close"
     >
-      <v-text-field
-        v-model="editedItem.imageURL"
+      <v-img v-if="editedItem.imageURL!=null" width="100%" :src="editedItem.imageURL"/>
+      <v-file-input
+        accept="image/*"
         label="Image"
+        v-model="editedItem.imageFile"
+        prepend-icon="mdi-camera"
+        @change="previewImage"
       />
-      <v-text-field
-        v-model="editedItem.fileURL"
-        label="File"
-      />
+      <v-file-input
+        accept="image/*"
+        label="Audio File"
+        v-model="editedItem.audioFile"
+      ></v-file-input>
       <v-text-field
         v-model="editedItem.title"
         label="Title"
@@ -112,7 +117,7 @@ export default {
        dialog: false,
        editedItem: {}
      }
-   },
+  },
   mounted (){
     this.bindReleases()
   },
@@ -140,6 +145,9 @@ export default {
       if (confirmation) {
         this.deleteRelease(item)
       }
+    },
+    previewImage() {
+      this.editedItem.imageURL = URL.createObjectURL(this.editedItem.imageFile)
     },
     close () {
       this.dialog = false
